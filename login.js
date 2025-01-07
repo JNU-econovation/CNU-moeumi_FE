@@ -1,33 +1,3 @@
-/*async function getData() {
-  const response = await fetch('http://백엔드주소/business-group', {
-    method: 'get',
-  });
-
-  return JSON.parse(response);
-}
-
-async function dologin(id, pw) {
-  const serverData = getData();
-  const userInput = login();
-
-  serverData.response.forEach((bsgroup) => {
-    if (serverData == userInput) {
-      alert(`${id}님 안녕하세요!`);
-      break;
-    } else {
-      continue;
-    };
-
-  });
-
-}
-
-const el = document.getElementById('btn');
-el.addEventListener('click', () => { //this 외부에 있음음
-  dologin(); 
-});
-*/
-
 // 로그인요청
 async function login(account_id, pw) {
   try {
