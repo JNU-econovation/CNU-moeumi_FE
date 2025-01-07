@@ -5,7 +5,7 @@ async function login(account_id, pw) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ account_id, pw }),
-      credentials: 'include', //이걸 추가하면 자동으로 세션쿠기가 전송됨
+      credentials: 'include', //이걸 추가하면 자동으로 세션쿠키가 전송됨
     });
 
     const data = await response.json();
