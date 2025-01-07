@@ -1,16 +1,20 @@
 // 로그인요청
 async function login(account_id, pw) {
   try {
-    const response = await fetch('http://백엔드주소/user/login', {
+    const response = await fetch('http://백엔드주소/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ account_id, pw }),
       credentials: 'include', //이걸 추가하면 자동으로 세션쿠기가 전송됨
     });
 
-    if (!response.ok) {
+    const data = await response.json();
+
+    if (!response.ok || data.success !== 'true') {
       throw new Error('로그인 실패함');
     }
+
+    alert(`반갑습니다, ${account_id} 님`);
     window.location.href = 'main.html';
   } catch (error) {
     alert('로그인 에러');
