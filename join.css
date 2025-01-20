@@ -98,7 +98,7 @@ section.join_form h1 {
   padding-left: 1.5px;
 }
 
-.log_btn {
+.join_btn {
   width: 100%;
   height: 50px;
   margin-left: 7px; /*로그인 폼이랑 크기는 같고 왼쪽 마진을 0으로 줘도 왜 안 맞는지 모르겠음->패딩이 있어서*/
@@ -107,7 +107,7 @@ section.join_form h1 {
   font-size: 20px;
   border: 0;
   padding: 5px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .join_info {
@@ -116,4 +116,14 @@ section.join_form h1 {
   border: 0;
   padding: 5px;
   margin-bottom: 10px;
+}
+
+#checkbtn {
+  border: 1px solid rgb(79, 79, 79);
+  border-radius: 2px;
+  width: 80px;
+  height: 30px;
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: 370;
 }

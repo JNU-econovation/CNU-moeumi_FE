@@ -4,24 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="join.css" />
-    <title>Document</title>
+    <title>회원가입</title>
   </head>
   <body>
     <header>
       <div class="header">
         <div class="logo">
-          <a href="main.html"><img src="h_logo.jpg" alt="h_logo" /></a>
+          <a href="main.html"><img src="h_logo.png" alt="h_logo" /></a>
         </div>
       </div>
     </header>
     <section class="join_form">
       <h1 class="join">회원가입</h1>
-      <form class="join_area" method="post" action="">
+      <form class="join_area" method="post">
         </form>
         <div class="id_pw_area">
           <div class="id_pw">
-            <input type="text" name="id" id="id" required />
-            <label for="id">아이디(메일주소@jnu.ac.kr)</label>
+            <input type="text" name="id" id="accountId" required />
+            <label for="accountId">아이디</label>
+            <button type="button" id="checkbtn">중복 확인</button>
           </div>
           <div class="id_pw">
             <input type="password" name="password" id="password" required />
@@ -37,23 +38,9 @@
         *영어와 숫자, 특수문자를 포함하여 6자 이상 20자 이하로 작성해주세요.
       </div>
       <div class="btn_area">
-        <button class="log_btn" type="submit" id="btn">가입하기</button>
+        <button class="join_btn" type="submit" id="join_btn">가입하기</button>
       </div>
     </section>
-    <script>
-      function pwconfirm() {
-        const pw=document.getElementById('password').value;
-        const pw_confirm=document.getElementById('password_confirm').value;
-
-        if (pw==pw_confirm) {
-          alert("회원가입이 완료되었습니다!");
-        } else {
-          alert("비밀번호가 일치하지 않습니다.");
-        }
-      }
-
-      const el = document.getElementById('btn');
-      el.addEventListener('click', pwconfirm);
-    </script>
+    <script type="module" src="join.js"></script>
   </body>
 </html>
