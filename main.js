@@ -1,31 +1,47 @@
 import { config } from './config.js';
 
+let login = false;
+let logoutt = false;
+
 async function getData() {
   try {
-    const response = await fetch('http://152.67.222.171:5000/api/alarm', {
+    const response = await fetch(config.serverURL + 'alarm', {
       method: 'GET',
+      credentials: 'include',
     });
 
     const data = await response.json();
-    return data;
+
+    const iscookie = data.response.every(
+      (group) => group.alarm.every((alarm) => 'like' in alarm) // 'like'있으면 쿠키 ㅇ, true
+    );
+
+    return { data, iscookie };
   } catch (error) {
     console.error('getData 오류 :', error);
+    return { data: null, iscookie: false };
   }
 }
-
 
 async function displayData() {
   const container = document.createElement('div');
   container.style.display = 'flex';
   container.style.flexWrap =
     'wrap'; /*자식 요소들이 컨테이너를 벗어날 때 다음 줄로 자동으로 넘겨줌*/
+  container.style.width = '1570px';
+  container.style.padding = '0px';
   container.style.gap = '20px';
-  container.style.padding = '20px';
-  container.style.paddingLeft = '45px';
+  container.style.margin = '25px auto';
   document.body.appendChild(container);
 
   try {
-    const data = await getData();
+    const { data, iscookie } = await getData();
+
+    if (!data) {
+      alert('데이터를 불러오는 데 실패했습니다.');
+      console.log('getData 오류');
+      return;
+    }
 
     data.response.forEach((group) => {
       /*foreach는 배열을 순회하는 매서드, 반복문이지만 값을 반환하지 않는 것이 특징! */
@@ -34,7 +50,7 @@ async function displayData() {
       box.style.width = '450px';
       box.style.margin = '20px';
       box.style.borderRadius = '10px';
-      box.style.padding = '15px';
+      box.style.padding = '10px';
       box.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
       box.style.display = 'flex';
       box.style.flexDirection = 'column';
@@ -103,16 +119,70 @@ async function displayData() {
           window.open(alarm.url, '_blank'); // URL 새 창 열기
         });
 
-        if (true) {
-          //로그인상태일때 상태코드
+        if (data.status == 401) {
+          //로그아웃 - 쿠키 비정상
+          if (!logoutt) {
+            logoutt = true;
+            alert(`${data.message}`);
+            window.location.reload(); // 페이지 새로고침
+            return;
+          }
+        } else if (data.ok && !iscookie) {
+          //로그아웃 + 쿠키 없음
+          login = false;
+          alarmItem.appendChild(dateContainer);
+          alarmItem.appendChild(titleElement);
+          alarmList.appendChild(alarmItem);
+        } else if (data.ok && iscookie) {
+          //로그인 +  쿠키 ㅇㅇ
+          login = true;
           const heartButton = document.createElement('div');
           heartButton.innerHTML = config.heart;
           heartButton.style.color = 'grey';
           heartButton.style.cursor = 'pointer';
           heartButton.style.marginLeft = '10px';
 
-          heartButton.addEventListener('click', () => {
-            bookmark(group.business_group_id, alarm.alarm_id, heartButton);
+          const like = alarm.like;
+          heartButton
+            .querySelector('path')
+            .setAttribute('fill', like == 1 ? 'red' : 'none');
+
+          heartButton.addEventListener('click', async function () {
+            //하트 누르면
+            //bookmark(group.business_group_id, alarm.alarm_id, heartButton);
+            try {
+              const newlike = like === 1 ? 0 : 1;
+
+              const response = await fetch(
+                config.serverURL + '/api/bookmarks/',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    business_group_id: group.business_group_id,
+                    alarm_id: alarm.alarm_id,
+                    like: newlike,
+                  }),
+                }
+              );
+
+              const result = await response.json();
+              if (result.ok) {
+                let path = heartButton.querySelector('path');
+                let currentFill = path.getAttribute('fill');
+                path.setAttribute(
+                  'fill',
+                  currentFill === 'red' ? 'none' : 'red'
+                );
+                alert(`${result.message}`);
+              } else {
+                alert('북마크 등록에 실패했습니다.');
+              }
+            } catch (error) {
+              console.error('서버 오류:', error);
+            }
           });
 
           alarmItem.appendChild(dateContainer);
@@ -120,10 +190,12 @@ async function displayData() {
           alarmItem.appendChild(heartButton);
           alarmList.appendChild(alarmItem);
         } else {
-          //로그인이 아닐때 상태코드
           alarmItem.appendChild(dateContainer);
           alarmItem.appendChild(titleElement);
           alarmList.appendChild(alarmItem);
+          alert(
+            '데이터를 불러오는 중 오류가 발생하였습니다. 잠시후 다시 시도해주세요'
+          );
         }
       });
 
@@ -168,32 +240,54 @@ async function displayData() {
   }
 }
 
-displayData();
-
-//게시글 좋아요(북마크)함수
-async function bookmark(business_group_id, alarm_id, heartButton) {
-  try {
-    const response = await fetch(config.serverURL + '/api/bookmarks/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        business_group_id: business_group_id,
-        alarm_id: alarm_id,
-      }),
-    });
-
-    const result = await response.json();
-    if (result.ok) {
-      let path = heartButton.querySelector('path');
-      let currentFill = path.getAttribute('fill');
-      path.setAttribute('fill', currentFill === 'red' ? 'none' : 'red');
-      alert(`${result.message}`);
-    } else {
-      alert('북마크 등록에 실패했습니다.');
-    }
-  } catch (error) {
-    console.error('서버 오류:', error);
+//로그인버튼 로그아웃버튼으로 바뀌는 함수
+function changeUI() {
+  const loginBtn = document.getElementById('head_log');
+  if (!login) {
+    loginBtn.textContent = '로그인';
+    loginBtn.onclick = () => (window.location.href = 'login.html'); //화살표함수
+  } else {
+    loginBtn.textContent = '로그아웃';
+    loginBtn.onclick = logout;
   }
 }
+
+//로그아웃함수(로그인페이지 제외)
+async function logout() {
+  if (!login) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const response = await fetch(config.serverURL + 'users/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.success !== 'true') {
+      console.log('로그아웃 실패');
+      throw new Error('로그아웃 실패');
+    }
+
+    changeUI();
+    alert(`${data.message}`);
+    window.location.href = 'main.html';
+  } catch (error) {
+    alert('오류가 발생했습니다.');
+  }
+}
+
+//코드 실행
+const loginBtn = document.getElementById('head_log');
+loginBtn.addEventListener('click', async function () {
+  await logout();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  changeUI();
+  displayData();
+});

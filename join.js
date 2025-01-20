@@ -17,7 +17,8 @@ async function join(accountId, password) {
 
     alert(`${data.message}`);
   } catch (error) {
-    alert('서버 오류', error);
+    alert('오류가 발생하였습니다');
+    console.log('서버 오류', error);
   }
 }
 

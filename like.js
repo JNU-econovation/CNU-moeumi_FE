@@ -15,6 +15,11 @@ async function displayData() {
 
   try {
     const data = await getData(); // 데이터 가져오기
+    if (data.status == 401) {
+      alert(`${response.message}`);
+      window.location, (href = 'login.html');
+      return;
+    }
     const Title = document.createElement('h4');
     Title.textContent = '♥️ 추천 공지사항';
     Title.style.paddingBottom = '20px';
@@ -61,25 +66,26 @@ async function displayData() {
   }
 }
 
-displayData();
+document.addEventListener('DOMContentLoaded', function () {
+  displayData();
+});
 //
 
 //데이터를 가져오는 함수
 
 /*
-async function fetchData() {
+async function getData() {
   try {
     const response = await fetch(config.serverURL+'recommendation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ..}),
+      credentials: 'include',
     });
 
     const data = await response.json();
-
-    displayData(data);
+    return data;
   } catch (error) {
     console.error('데이터 가져오기 실패:', error);
   }
@@ -189,10 +195,10 @@ document
       if (response.ok) {
         console.log('태그 정보 보내기 성공');
       } else {
-        console.log('태그 정보 보내기 실패');
+        throw error('태그 정보 보내기 실패');
       }
     } catch (error) {
-      console.log('데이터 오류');
+      console.log('데이터 오류', error);
       alert('오류가 발생하였습니다.');
     }
   });
