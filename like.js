@@ -1,3 +1,7 @@
+import { config } from './config.js';
+
+let login = false;
+
 //사업단 공지 보여주는 함수
 async function displayData() {
   const aiBox = document.getElementById('ai_box');
@@ -15,11 +19,16 @@ async function displayData() {
 
   try {
     const data = await getData(); // 데이터 가져오기
-    if (data.status == 401) {
-      alert(`${response.message}`);
-      window.location, (href = 'login.html');
+    if (response.status == 401) {
+      alert(`${data.message}`);
+      window.location.href = 'login.html';
       return;
     }
+
+    if (response.ok) {
+      login = true;
+    }
+
     const Title = document.createElement('h4');
     Title.textContent = '♥️ 추천 공지사항';
     Title.style.paddingBottom = '20px';
@@ -73,10 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //데이터를 가져오는 함수
 
-/*
 async function getData() {
   try {
-    const response = await fetch(config.serverURL+'recommendation', {
+    const response = await fetch(config.serverURL + 'recommendation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -90,8 +98,8 @@ async function getData() {
     console.error('데이터 가져오기 실패:', error);
   }
 }
-  */
 
+/*
 async function getData() {
   // 하드코딩 JSON 데이터 -> 백엔드 끝나면 수정
   return {
@@ -142,6 +150,7 @@ async function getData() {
     ],
   };
 }
+*/
 
 //
 
@@ -203,3 +212,51 @@ document
     }
   });
 //
+
+//로그인버튼 로그아웃버튼으로 바뀌는 함수
+function changeUI() {
+  const loginBtn = document.getElementById('head_log');
+
+  if (!login) {
+    loginBtn.textContent = '로그인';
+    loginBtn.onclick = () => (window.location.href = 'login.html'); //화살표함수
+  } else {
+    loginBtn.textContent = '로그아웃';
+    loginBtn.onclick = logout;
+  }
+}
+
+//로그아웃함수(로그인페이지 제외)
+async function logout() {
+  if (!login) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  try {
+    const response = await fetch(config.serverURL + 'users/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.success !== 'true') {
+      console.log('로그아웃 실패');
+      throw new Error('로그아웃 실패');
+    }
+
+    changeUI();
+    alert(`${data.message}`);
+    window.location.href = 'main.html';
+  } catch (error) {
+    alert('오류가 발생했습니다.');
+  }
+}
+
+//코드 실행
+const loginBtn = document.getElementById('head_log');
+loginBtn.addEventListener('click', async function () {
+  await logout();
+});
