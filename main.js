@@ -116,10 +116,22 @@ async function displayData() {
           titleElement.style.textDecoration = 'none';
         });
         titleElement.addEventListener('click', () => {
-          window.open(alarm.url, '_blank'); // URL 새 창 열기
+          if (groupTitle.textContent == '소프트웨어중심대학사업단') {
+            window.open(config.s + alarm.url, '_blank');
+          } else if (groupTitle.textContent == '인공지능혁신융합대학사업단') {
+            window.open(config.i + alarm.url, '_blank');
+          } else if (groupTitle.textContent == '차세대통신혁신융합대학사업단') {
+            window.open(config.c + alarm.url, '_blank');
+          } else if (
+            groupTitle.textContent == 'EnergyAI핵심인재양선교육연구단'
+          ) {
+            window.open(config.e + alarm.url, '_blank');
+          } else {
+            window.open(config.cnu + alarm.url, '_blank');
+          }
         });
 
-        if (data.status == 401) {
+        if (response.status == 401) {
           //로그아웃 - 쿠키 비정상
           if (!logoutt) {
             logoutt = true;
@@ -127,13 +139,13 @@ async function displayData() {
             window.location.reload(); // 페이지 새로고침
             return;
           }
-        } else if (data.ok && !iscookie) {
+        } else if (response.ok && !iscookie) {
           //로그아웃 + 쿠키 없음
           login = false;
           alarmItem.appendChild(dateContainer);
           alarmItem.appendChild(titleElement);
           alarmList.appendChild(alarmItem);
-        } else if (data.ok && iscookie) {
+        } else if (response.ok && iscookie) {
           //로그인 +  쿠키 ㅇㅇ
           login = true;
           const heartButton = document.createElement('div');
@@ -148,8 +160,6 @@ async function displayData() {
             .setAttribute('fill', like == 1 ? 'red' : 'none');
 
           heartButton.addEventListener('click', async function () {
-            //하트 누르면
-            //bookmark(group.business_group_id, alarm.alarm_id, heartButton);
             try {
               const newlike = like === 1 ? 0 : 1;
 
@@ -169,7 +179,7 @@ async function displayData() {
               );
 
               const result = await response.json();
-              if (result.ok) {
+              if (response.ok) {
                 let path = heartButton.querySelector('path');
                 let currentFill = path.getAttribute('fill');
                 path.setAttribute(

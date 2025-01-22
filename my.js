@@ -9,12 +9,18 @@ async function getData() {
       method: 'GET',
       credentials: 'include',
     });
+
+    const likeData = await response.json();
+
     if (response.status == 401) {
-      alert(`${response.message}`);
+      alert(`${likeData.message}`);
       window.location.href = 'login.html';
       return;
     }
-    const likeData = await response.json();
+
+    if (response.ok) {
+      login = true;
+    }
 
     const businessGroupMap = {
       소프트웨어중심대학사업단: 'sojoong',
@@ -27,7 +33,11 @@ async function getData() {
       취업진로공지: 'chjin', //중요--> 서버랑 이름 맞추기!!!!!!
     };
 
-    console.log(likeData); // 삭제제
+    console.log(likeData); // 삭제!!!
+
+    const userId = likeData.accountId;
+    const usernameDiv = document.querySelector('.username_div');
+    usernameDiv.innerHTML = `<span style="font-weight: bold;">${userId}</span> 님의 즐겨찾기`;
 
     likeData.message.forEach((item) => {
       const starId = businessGroupMap[item.business_group_name];
@@ -168,8 +178,7 @@ async function logout() {
 
 //코드 실행
 
-/*const loginBtn = document.getElementById('head_log');
+const loginBtn = document.getElementById('head_log');
 loginBtn.addEventListener('click', async function () {
   await logout();
 });
-*/
