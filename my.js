@@ -147,7 +147,7 @@ function changeUI() {
   }
 }
 
-//로그아웃함수(로그인페이지 제외) 프론트에서 뭔가 처리를 안하는게 맞지 않나, 어카운트아이디 바디에서 없애는 방향 바디가 없으면 post 댜신 다른 매서드 고민
+//로그아웃함수(로그인페이지 제외)
 async function logout() {
   if (!login) {
     window.location.href = 'login.html';
