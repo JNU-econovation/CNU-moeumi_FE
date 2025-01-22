@@ -229,13 +229,13 @@ async function displayData() {
           window.open(config.chahyuck, '_blank');
         } else if (groupTitle.textContent == 'EnergyAI핵심인재양선교육연구단') {
           window.open(config.EAI, '_blank');
-        } else if (groupTitle.textContent == '포털 공지사항') {
+        } else if (groupTitle.textContent == '포털공지사항') {
           window.open(config.potal, '_blank');
-        } else if (groupTitle.textContent == '학사 안내') {
+        } else if (groupTitle.textContent == '학사안내') {
           window.open(config.haksa, '_blank');
-        } else if (groupTitle.textContent == '장학 안내') {
+        } else if (groupTitle.textContent == '장학안내') {
           window.open(config.janghack, '_blank');
-        } else if (groupTitle.textContent == '취업 안내') {
+        } else if (groupTitle.textContent == '취업정보') {
           window.open(config.chjin, '_blank');
         } else {
           alert('지원하지 않습니다');

@@ -27,10 +27,10 @@ async function getData() {
       인공지능혁신융합대학사업단: 'inhyuck',
       차세대통신혁신융합대학사업단: 'chahyuck',
       EnergyAI핵심인재양선교육연구단: 'EAI',
-      전남대포털공지사항: 'potal',
+      포털공지사항: 'potal',
       학사안내: 'haksa',
       장학안내: 'janghack',
-      취업진로공지: 'chjin', //중요--> 서버랑 이름 맞추기!!!!!!
+      취업정보: 'chjin', //중요--> 서버랑 이름 맞추기!!!!!!
     };
 
     console.log(likeData); // 삭제!!!
