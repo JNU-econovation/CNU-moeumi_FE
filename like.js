@@ -243,10 +243,11 @@ async function logout() {
     const data = await response.json();
 
     if (!response.ok || data.success !== 'true') {
-      console.log('로그아웃 실패');
+      console.error('로그아웃 실패');
       throw new Error('로그아웃 실패');
     }
 
+    login = false;
     changeUI();
     alert(`${data.message}`);
     window.location.href = 'main.html';
@@ -258,5 +259,9 @@ async function logout() {
 //코드 실행
 const loginBtn = document.getElementById('head_log');
 loginBtn.addEventListener('click', async function () {
-  await logout();
+  if (login) {
+    await logout();
+  } else {
+    window.location.href = 'login.html';
+  }
 });
