@@ -302,3 +302,7 @@ loginBtn.addEventListener('click', async function () {
     window.location.href = 'login.html';
   }
 });
+
+document.addEventListener('DOMContentLoaded', async function () {
+  await displayData();
+});
