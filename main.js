@@ -5,7 +5,7 @@ let logoutt = false;
 
 async function getcookie() {
   try {
-    const response = await fetch(config.serverURL + 'cookie', {
+    const response = await fetch(config.serverURL + 'users/iscookie', {
       method: 'GET',
       credentials: 'include',
     });
@@ -36,10 +36,10 @@ async function getData() {
 
     const data = await response.json();
 
-    return data;
+    return { data, response };
   } catch (error) {
     console.error('getData 오류 :', error);
-    return data;
+    return { data, response };
   }
 }
 
@@ -55,7 +55,7 @@ async function displayData() {
   document.body.appendChild(container);
 
   try {
-    const data = await getData();
+    const { data, response } = await getData();
     const login = await getcookie();
 
     if (!data) {
