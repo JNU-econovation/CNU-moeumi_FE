@@ -18,7 +18,7 @@ async function displayData() {
   aiBox.appendChild(container); // aiBox 아래에 추가하기
 
   try {
-    const data = await getData(); // 데이터 가져오기
+    const { data, response } = await getData(); // 데이터 가져오기
     if (response.status == 401) {
       alert(`${data.message}`);
       window.location.href = 'login.html';
@@ -93,66 +93,11 @@ async function getData() {
     });
 
     const data = await response.json();
-    return data;
+    return { data, response };
   } catch (error) {
     console.error('데이터 가져오기 실패:', error);
   }
 }
-
-/*
-async function getData() {
-  // 하드코딩 JSON 데이터 -> 백엔드 끝나면 수정
-  return {
-    response: [
-      {
-        business_group_name: 'notice_haksa',
-        business_group_id: '1',
-        alarm: [
-          {
-            title:
-              '[학사안내][채용공고] 전남대학교 사범대학 가정교육과 교육공무원(조교) 공개 채용 공고',
-            url: 'https://www.jnu.ac.kr/WebApp/web/HOM/COM/Board/board.aspx?boardID=5&bbsMode=view&page=1&key=64820&cate=5',
-          },
-        ],
-      },
-      {
-        business_group_name: 'notice_daehak',
-        business_group_id: '2',
-        alarm: [
-          {
-            title:
-              '[학사안내]2025학년도 1학기 타 대학교(동국대 일반대학원) 교류학생 신청 안내',
-            url: 'https://www.jnu.ac.kr/WebApp/web/HOM/COM/Board/board.aspx?boardID=5&bbsMode=view&page=1&key=64814&cate=5',
-          },
-        ],
-      },
-      {
-        business_group_name: 'notice_janghak',
-        business_group_id: '3',
-        alarm: [
-          {
-            title: '[장학안내]2025년도 1학기 한국여성의정 장학생 모집 안내',
-            url: 'https://www.jnu.ac.kr/WebApp/web/HOM/COM/Board/board.aspx?boardID=5&bbsMode=view&page=1&key=64799&cate=8',
-          },
-        ],
-      },
-      {
-        business_group_name: 'sojoong',
-        business_group_id: '2',
-        alarm: [
-          {
-            title:
-              '[행사안내] 2024 공동 SW산업세미나 신청 안내(4회차 신청기간: ~11.19.까지)',
-            url: 'https://www.sojoong.kr/www/notice/view/646',
-          },
-        ],
-      },
-    ],
-  };
-}
-*/
-
-//
 
 //태그 누르면 태그 색 바뀜 + 회색 창에 들어감
 const tagStatus = { tag: [] };
