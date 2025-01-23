@@ -5,7 +5,7 @@ let login = false;
 //사업단 공지 보여주는 함수
 async function displayData() {
   const aiBox = document.getElementById('ai_box');
-  const recommendButton = document.getElementById('like_btn'); // 추천 버튼 찾기
+  const recommendButton = document.getElementById('like_btn');
 
   //추천 버튼 아래 컨테이너를 추가
   const container = document.createElement('div');
