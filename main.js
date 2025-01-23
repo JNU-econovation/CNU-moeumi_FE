@@ -56,7 +56,25 @@ async function displayData() {
       box.style.flexDirection = 'column';
 
       const groupTitle = document.createElement('h3');
-      groupTitle.textContent = group.business_group_name;
+      if (group.businessGroupName == 'sojoong') {
+        groupTitle.textContent = '소프트웨어중심대학사업단';
+      } else if (group.businessGroupName == 'inhyuck') {
+        groupTitle.textContent = '인공지능혁신융합대학사업단';
+      } else if (group.businessGroupName == 'chahyuck') {
+        groupTitle.textContent = '차세대통신혁신융합대학사업단';
+      } else if (group.businessGroupName == 'EAI') {
+        groupTitle.textContent = 'EnergyAI핵심인재양선교육연구단';
+      } else if (group.businessGroupName == 'potal') {
+        groupTitle.textContent = '포털공지사항';
+      } else if (group.businessGroupName == 'haksa') {
+        groupTitle.textContent = '학사안내';
+      } else if (group.businessGroupName == 'janghack') {
+        groupTitle.textContent = '장학안내';
+      } else if (group.businessGroupName == 'chjin') {
+        groupTitle.textContent = '취업정보';
+      } else {
+        groupTitle.textContent = 'null';
+      }
       groupTitle.style.borderBottom = '1.3px solid lightgrey';
       groupTitle.style.padding = '10px 0';
       groupTitle.style.marginBottom = '15px';
@@ -105,9 +123,9 @@ async function displayData() {
         const titleElement = document.createElement('span');
         titleElement.textContent = alarm.title;
         titleElement.style.flex = '1';
-        titleElement.style.whiteSpace = 'nowrap'; //줄바꿈 안 된게 해줌
-        titleElement.style.overflow = 'hidden'; //박스 범위 초과하면 글자 안보여줌
-        titleElement.style.textOverflow = 'ellipsis'; //글자 잘릴때 ...해줌
+        titleElement.style.whiteSpace = 'nowrap';
+        titleElement.style.overflow = 'hidden';
+        titleElement.style.textOverflow = 'ellipsis';
         titleElement.style.cursor = 'pointer';
         titleElement.addEventListener('mouseover', () => {
           titleElement.style.textDecoration = 'underline';
@@ -171,7 +189,7 @@ async function displayData() {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    business_group_id: group.business_group_id,
+                    businessGroupId: group.businessGroupId,
                     alarm_id: alarm.alarm_id,
                     like: newlike,
                   }),
