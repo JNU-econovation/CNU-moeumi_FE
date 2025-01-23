@@ -11,17 +11,17 @@ async function getcookie() {
     });
 
     if (response.status == 401) {
-      login = false;
-      return login;
+      return false;
     }
 
     if (response.ok) {
-      login = true;
-      return login;
+      return true;
     }
+
+    return false;
   } catch (error) {
     console.error('getcookie 오류 :', error);
-    return login;
+    return false;
   }
 }
 
@@ -54,7 +54,9 @@ async function displayData() {
 
   try {
     const { data, response } = await getData();
-    const login = await getcookie();
+    const isLoggedIn = await getcookie();
+    login = isLoggedIn;
+    changeUI();
 
     if (!data) {
       alert('데이터를 불러오는 데 실패했습니다.');
@@ -174,15 +176,14 @@ async function displayData() {
             logoutt = true;
             alert(`${data.message}`);
             window.location.reload(); // 페이지 새로고침
-            return;
           }
+          return;
         } else if (response.ok && !login) {
           //로그아웃 + 쿠키 없음
           alarmItem.appendChild(dateContainer);
           alarmItem.appendChild(titleElement);
           alarmList.appendChild(alarmItem);
         } else if (response.ok && login) {
-          login = true;
           const heartButton = document.createElement('div');
           heartButton.innerHTML = config.heart;
           heartButton.style.color = 'grey';
