@@ -5,7 +5,7 @@ let logoutt = false;
 
 async function getcookie() {
   try {
-    const response = await fetch(config.serverURL + 'iscookie', {
+    const response = await fetch(config.serverURL + 'users/iscookie', {
       method: 'GET',
       credentials: 'include',
     });
