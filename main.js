@@ -16,10 +16,10 @@ async function getData() {
       (group) => group.alarm.every((alarm) => 'like' in alarm) // 'like'있으면 쿠키 ㅇ, true
     );
 
-    return { data, iscookie };
+    return { data, iscookie, response };
   } catch (error) {
     console.error('getData 오류 :', error);
-    return { data: null, iscookie: false };
+    return { data: null, iscookie: false, response: null };
   }
 }
 
@@ -35,7 +35,7 @@ async function displayData() {
   document.body.appendChild(container);
 
   try {
-    const { data, iscookie } = await getData();
+    const { data, iscookie, response } = await getData();
 
     if (!data) {
       alert('데이터를 불러오는 데 실패했습니다.');
