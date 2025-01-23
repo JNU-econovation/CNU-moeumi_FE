@@ -10,8 +10,6 @@ async function getcookie() {
       credentials: 'include',
     });
 
-    console.log(`${cookiedata}`);
-
     if (response.status == 401) {
       login = false;
       return login;
@@ -184,6 +182,7 @@ async function displayData() {
           alarmItem.appendChild(titleElement);
           alarmList.appendChild(alarmItem);
         } else if (response.ok && login) {
+          login = true;
           const heartButton = document.createElement('div');
           heartButton.innerHTML = config.heart;
           heartButton.style.color = 'grey';
@@ -206,7 +205,7 @@ async function displayData() {
                 },
                 body: JSON.stringify({
                   businessGroupId: group.businessGroupId,
-                  alarm_id: alarm.alarm_id,
+                  alarmId: alarm.alarmId,
                   like: newlike,
                 }),
               });
