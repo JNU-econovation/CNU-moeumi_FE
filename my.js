@@ -23,14 +23,14 @@ async function getData() {
     }
 
     const businessGroupMap = {
-      소프트웨어중심대학사업단: 'sojoong',
-      인공지능혁신융합대학사업단: 'inhyuck',
-      차세대통신혁신융합대학사업단: 'chahyuck',
-      EnergyAI핵심인재양선교육연구단: 'EAI',
-      포털공지사항: 'potal',
-      학사안내: 'haksa',
-      장학안내: 'janghack',
-      취업정보: 'chjin', //중요--> 서버랑 이름 맞추기!!!!!!
+      sojoong: 'sojoong',
+      inhyuck: 'inhyuck',
+      chahyuck: 'chahyuck',
+      EAI: 'EAI',
+      potal: 'potal',
+      haksa: 'haksa',
+      janghack: 'janghack',
+      chjin: 'chjin',
     };
 
     console.log(likeData); // 삭제!!!
@@ -40,7 +40,7 @@ async function getData() {
     usernameDiv.innerHTML = `<span style="font-weight: bold;">${userId}</span> 님의 즐겨찾기`;
 
     likeData.message.forEach((item) => {
-      const starId = businessGroupMap[item.business_group_name];
+      const starId = businessGroupMap[item.businessGroupName];
       if (starId) {
         const star = document.getElementById(starId);
         if (star) {
@@ -103,7 +103,7 @@ document
     try {
       // 서버 형식
       const favoriteList = Object.keys(favoriteStatus).map((key) => ({
-        business_group_name: key,
+        businessGroupName: key,
         liked: favoriteStatus[key],
       }));
 
@@ -124,6 +124,7 @@ document
       if (response.ok) {
         alert('즐겨찾기가 저장되었습니다.');
         console.log(result);
+        window.location.reload;
       } else {
         alert(`저장 실패: ${result.message}`);
       }
@@ -158,6 +159,7 @@ async function logout() {
     const response = await fetch(config.serverURL + 'users/logout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(accountId),
       credentials: 'include',
     });
 
@@ -173,7 +175,7 @@ async function logout() {
     alert(`${data.message}`);
     window.location.href = 'main.html';
   } catch (error) {
-    alert('오류가 발생했습니다.');
+    alert('오류가 발생했습니다.', error);
   }
 }
 
