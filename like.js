@@ -29,6 +29,8 @@ async function displayData() {
       login = true;
     }
 
+    changeUI();
+
     const Title = document.createElement('h4');
     Title.textContent = '♥️ 추천 공지사항';
     Title.style.paddingBottom = '20px';
