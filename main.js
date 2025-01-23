@@ -205,7 +205,6 @@ async function displayData() {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  businessGroupId: group.businessGroupId,
                   alarmId: alarm.alarmId,
                   like: newlike,
                 }),
@@ -310,19 +309,17 @@ async function logout() {
       credentials: 'include',
     });
 
-    const data = await response.json();
-
-    if (!response.ok || data.success !== 'true') {
+    if (!response.ok) {
       console.error('로그아웃 실패');
       throw new Error('로그아웃 실패');
     }
 
     login = false;
     changeUI();
-    alert(`${data.message}`);
+    alert('로그아웃 되었습니다');
     window.location.href = 'main.html';
   } catch (error) {
-    alert('오류가 발생했습니다.');
+    console.log('오류가 발생했습니다.', error);
   }
 }
 
