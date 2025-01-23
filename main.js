@@ -288,7 +288,7 @@ function changeUI() {
 
   if (!login) {
     loginBtn.textContent = '로그인';
-    loginBtn.onclick = () => (window.location.href = 'login.html'); //화살표함수
+    loginBtn.onclick = () => (window.location.href = 'login.html');
   } else {
     loginBtn.textContent = '로그아웃';
     loginBtn.onclick = logout;
