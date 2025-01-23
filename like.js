@@ -75,11 +75,6 @@ async function displayData() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  displayData();
-});
-//
-
 //데이터를 가져오는 함수
 
 async function getData() {
@@ -209,4 +204,8 @@ loginBtn.addEventListener('click', async function () {
   } else {
     window.location.href = 'login.html';
   }
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
+  await displayData();
 });
