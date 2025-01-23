@@ -13,7 +13,7 @@ function changeUI() {
   }
 }
 
-//로그아웃함수(로그인페이지 제외) 프론트에서 뭔가 처리를 안하는게 맞지 않나, 어카운트아이디 바디에서 없애는 방향 바디가 없으면 post 댜신 다른 매서드 고민
+//로그아웃함수(로그인페이지 제외)
 async function logout() {
   if (!login) {
     window.location.href = 'login.html';
@@ -27,19 +27,17 @@ async function logout() {
       credentials: 'include',
     });
 
-    const data = await response.json();
-
-    if (!response.ok || data.success !== 'true') {
+    if (!response.ok) {
       console.error('로그아웃 실패');
       throw new Error('로그아웃 실패');
     }
 
     login = false;
     changeUI();
-    alert(`${data.message}`);
+    alert('로그아웃 되었습니다');
     window.location.href = 'main.html';
   } catch (error) {
-    alert('오류가 발생했습니다.');
+    console.log('오류가 발생했습니다.', error);
   }
 }
 
