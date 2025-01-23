@@ -3,6 +3,30 @@ import { config } from './config.js';
 let login = false;
 let logoutt = false;
 
+async function getcookie() {
+  try {
+    const response = await fetch(config.serverURL + 'cookie', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    console.log(`${cookiedata}`);
+
+    if (response.status == 401) {
+      login = false;
+      return login;
+    }
+
+    if (response.ok) {
+      login = true;
+      return login;
+    }
+  } catch (error) {
+    console.error('getcookie 오류 :', error);
+    return login;
+  }
+}
+
 async function getData() {
   try {
     const response = await fetch(config.serverURL + 'alarm', {
@@ -12,14 +36,10 @@ async function getData() {
 
     const data = await response.json();
 
-    const iscookie = data.response.every(
-      (group) => group.alarm.every((alarm) => 'like' in alarm) // 'like'있으면 쿠키 ㅇ, true
-    );
-
-    return { data, iscookie, response };
+    return data;
   } catch (error) {
     console.error('getData 오류 :', error);
-    return { data: null, iscookie: false, response: null };
+    return data;
   }
 }
 
@@ -35,7 +55,8 @@ async function displayData() {
   document.body.appendChild(container);
 
   try {
-    const { data, iscookie, response } = await getData();
+    const data = await getData();
+    const login = await getcookie();
 
     if (!data) {
       alert('데이터를 불러오는 데 실패했습니다.');
@@ -157,15 +178,12 @@ async function displayData() {
             window.location.reload(); // 페이지 새로고침
             return;
           }
-        } else if (response.ok && !iscookie) {
+        } else if (response.ok && !login) {
           //로그아웃 + 쿠키 없음
-          login = false;
           alarmItem.appendChild(dateContainer);
           alarmItem.appendChild(titleElement);
           alarmList.appendChild(alarmItem);
-        } else if (response.ok && iscookie) {
-          //로그인 +  쿠키 ㅇㅇ
-          login = true;
+        } else if (response.ok && login) {
           const heartButton = document.createElement('div');
           heartButton.innerHTML = config.heart;
           heartButton.style.color = 'grey';
@@ -181,20 +199,17 @@ async function displayData() {
             try {
               const newlike = like === 1 ? 0 : 1;
 
-              const response = await fetch(
-                config.serverURL + '/api/bookmarks/',
-                {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    businessGroupId: group.businessGroupId,
-                    alarm_id: alarm.alarm_id,
-                    like: newlike,
-                  }),
-                }
-              );
+              const response = await fetch(config.serverURL + 'bookmarks/', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  businessGroupId: group.businessGroupId,
+                  alarm_id: alarm.alarm_id,
+                  like: newlike,
+                }),
+              });
 
               const result = await response.json();
               if (response.ok) {
