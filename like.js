@@ -130,8 +130,12 @@ document
   .getElementById('like_btn')
   .addEventListener('click', async function () {
     try {
-      const sendtag = { tag: tagStatus.tag };
-      console.log(sendtag);
+      const sendtag = {
+        tag: tagStatus.tag,
+        title: ['제목1', '제목2', '제목3'],
+      };
+
+      console.log('전송 데이터:', JSON.stringify(sendtag));
 
       const response = await fetch(config.serverURL + 'recommendation', {
         method: 'POST',
@@ -145,12 +149,12 @@ document
 
       if (response.ok) {
         console.log('태그 정보 보내기 성공');
-        await displayData();
+        window.location.reload();
       } else {
-        throw error('태그 정보 보내기 실패');
+        throw new Error('태그 정보 보내기 실패');
       }
     } catch (error) {
-      console.log('데이터 오류', error);
+      console.log('데이터 오류:', error);
       alert('오류가 발생하였습니다.');
     }
   });
