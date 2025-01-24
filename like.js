@@ -133,7 +133,7 @@ document
       const sendtag = { tag: tagStatus.tag };
       console.log(sendtag);
 
-      const response = await fetch('백엔드주소', {
+      const response = await fetch(config.serverURL + 'recommendation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -145,6 +145,7 @@ document
 
       if (response.ok) {
         console.log('태그 정보 보내기 성공');
+        await displayData();
       } else {
         throw error('태그 정보 보내기 실패');
       }
@@ -204,8 +205,4 @@ loginBtn.addEventListener('click', async function () {
   } else {
     window.location.href = 'login.html';
   }
-});
-
-document.addEventListener('DOMContentLoaded', async function () {
-  await displayData();
 });
